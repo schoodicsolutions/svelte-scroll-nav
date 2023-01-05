@@ -7,21 +7,19 @@ import { goto } from '$app/navigation';
 
 import ScrollWatcher from './ScrollWatcher.svelte';
 
-export { ScrollWatcher };
+export { ScrollWatcher, section, sections };
 
 export interface LinkOptions {
     onNavigate?: () => void;
-    scrollTo: string;
+    section: string;
 }
 
 export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
-    const {scrollTo, onNavigate} = options;
-
     const listener = async (e: MouseEvent) => {
         e.preventDefault();
         
-        if (onNavigate) {
-            onNavigate();
+        if (options.onNavigate) {
+            options.onNavigate();
         }
 
         if (node.href) {
@@ -30,11 +28,11 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
             await goto(get(page).url.pathname);
         }
 
-        if (scrollTo === reserved.top) {
+        if (options.section === reserved.top) {
             return;
         }
 
-        const wantedSection = get(sections).get(scrollTo);;
+        const wantedSection = get(sections).get(options.section);;
 
         if (wantedSection) {
             wantedSection.scrollIntoView(true);
@@ -42,7 +40,7 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
             return;
         }
 
-        section.set(scrollTo);
+        section.set(options.section);
 
     };
 
