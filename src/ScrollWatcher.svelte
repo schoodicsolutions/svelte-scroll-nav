@@ -13,7 +13,7 @@
 
     let scrollY: number;
 
-    const bufferLimit = 3;
+    const bufferLimit = 8;
 
     const getCurrentSectionName = () => {
         let currentSection: string = get(section);
@@ -66,6 +66,7 @@
     const watchScroll = () => {
         if (watching) return;
 
+        console.log('start watching');
         watching = true;
 
         const step = () => {
@@ -76,13 +77,18 @@
             prevPositions.push(scrollY);
 
             if (prevPositions.filter(v => v === scrollY).length === bufferLimit) {
+                console.log($linkClicked);
                 if ($linkClicked) {
+                    console.log('do NOT update section name');
                     $linkClicked = false;
-                } else {
-                    $section = getCurrentSectionName();
                     watching = false;
                     return;
                 }
+                console.log('updating section name')
+                $section = getCurrentSectionName();
+                $linkClicked = false;
+                watching = false;
+                return;
             }
 
             window.requestAnimationFrame(step);

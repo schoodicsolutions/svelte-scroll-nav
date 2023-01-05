@@ -17,9 +17,7 @@ export interface LinkOptions {
 export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
     const listener = async (e: MouseEvent) => {
         e.preventDefault();
-        
-        linkClicked.set(true);
-        
+
         if (options.onNavigate) {
             options.onNavigate();
         }
@@ -46,6 +44,7 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
             return;
         }
 
+        linkClicked.set(true);
         section.set(options.section);
 
         return false;
