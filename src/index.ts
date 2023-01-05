@@ -42,6 +42,7 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
 
         section.set(options.section);
 
+        return false;
     };
 
     node.addEventListener('click', listener);

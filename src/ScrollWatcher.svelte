@@ -19,10 +19,10 @@
             console.log(name, boundingRect.top, window.scrollY);
 
             const withinTopHalf = boundingRect.top <= window.screen.height / 2;
-            const aboveScreen = boundingRect.top >= 0;
+            const belowScreen = boundingRect.top >= 0;
             const isLastSection = el === Array.from($sections.values()).at(-1);
 
-            if (withinTopHalf && (aboveScreen || isLastSection)) {
+            if (withinTopHalf && (belowScreen || isLastSection)) {
                 currentSection = name;
                 break;
             }
