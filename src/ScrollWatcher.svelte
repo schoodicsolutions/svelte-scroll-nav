@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { get } from 'svelte/store';
 	import { reserved } from './constants';
-	import { section, sections, linkClicked, weights as weightsStore } from './stores';
+	import { section, sections, linkClicked } from './stores';
 
     interface SectionWeight {
         name: string,
@@ -55,13 +55,11 @@
             }
         )
 
-        weightsStore.set(weights.slice());
-
-        const winner = weights.sort(
+        const heaviestSection = weights.sort(
             (weightA, weightB) => weightA.weight - weightB.weight
         ).pop();
 
-        return winner?.name || currentSection;
+        return heaviestSection?.name || currentSection;
     }
 
 
