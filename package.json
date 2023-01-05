@@ -1,6 +1,7 @@
 {
 	"name": "svelte-scroll-nav",
 	"version": "1.0.0",
+	"main": "index.js",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "svelte-kit sync && svelte-package",
