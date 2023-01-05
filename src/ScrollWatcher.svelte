@@ -66,7 +66,6 @@
     const watchScroll = () => {
         if (watching) return;
 
-        console.log('start watching', Math.random());
         watching = true;
 
         const step = () => {
