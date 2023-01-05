@@ -66,23 +66,20 @@
     const watchScroll = () => {
         if (watching) return;
 
-        console.log('start watching');
+        console.log('start watching', Math.random());
         watching = true;
 
         const step = () => {
             if (prevPositions.length === bufferLimit) { 
-                prevPositions.shift()
+                prevPositions.shift();
             };
 
             prevPositions.push(scrollY);
 
             if (prevPositions.filter(v => v === scrollY).length === bufferLimit) {
                 if ($linkClicked) {
-                    setTimeout(() => {
-                        $linkClicked = false;
-                        watching = false;
-                        return;
-                    }, 1000);
+                    $linkClicked = false;
+                    watching = false;
                     return;
                 }
                 $section = getCurrentSectionName();

@@ -27,7 +27,7 @@
 <div style="margin-top: 50px;">
     <section>Top</section>
     {#each Array(200).fill(null).map((_, i) => i + 1) as index}
-        <section style="height: 33vh; border-top: 2px black solid;" use:scrollRef={`section${index}`}>
+        <section style="height: 20vh; border-top: 2px black solid;" use:scrollRef={`section${index}`}>
             <h1>Section {index}</h1>
         </section>
     {/each}
