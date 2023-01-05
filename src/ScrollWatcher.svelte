@@ -31,11 +31,11 @@
                 const peekingFromTop = rect.bottom > 0 && rect.bottom < window.innerHeight;
                 const peekingFromBottom = rect.top > 0 && rect.bottom >= window.innerHeight;
 
-                if (fullyInView || takesUpScreen) {
+                if (takesUpScreen || fullyInView) {
                     return {
-                        name, 
-                        weight: 1
-                    };
+                        name,
+                        weight: 1,
+                    }
                 } else if (peekingFromTop) {
                     return {
                         name,
