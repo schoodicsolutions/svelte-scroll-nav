@@ -9,6 +9,7 @@
 <style>
     :global(html) {
         scroll-behavior: smooth;
+        margin: 0;
     }
 </style>
 
@@ -16,7 +17,7 @@
 
 <ScrollWatcher />
 
-<div style="position: fixed; height: 50px; top: 0;">
+<div style="position: fixed; height: 50px; top: 0; background: white; box-shadow: #000 0 0 2px 2px; width: 100%;">
     {$section} 
     <a href="/" use:scrollTo={{section: 'section4'}}>section4</a>
     {scrollY}

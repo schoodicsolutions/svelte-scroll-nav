@@ -84,11 +84,10 @@
                         return;
                     }, 1000);
                     return;
-                } else {
-                    $section = getCurrentSectionName();
-                    $linkClicked = false;
-                    watching = false;
                 }
+                $section = getCurrentSectionName();
+                $linkClicked = false;
+                watching = false;
             }
 
             window.requestAnimationFrame(step);
