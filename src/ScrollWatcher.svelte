@@ -77,18 +77,18 @@
             prevPositions.push(scrollY);
 
             if (prevPositions.filter(v => v === scrollY).length === bufferLimit) {
-                console.log($linkClicked);
                 if ($linkClicked) {
-                    console.log('do NOT update section name');
+                    setTimeout(() => {
+                        $linkClicked = false;
+                        watching = false;
+                        return;
+                    }, 1000);
+                    return;
+                } else {
+                    $section = getCurrentSectionName();
                     $linkClicked = false;
                     watching = false;
-                    return;
                 }
-                console.log('updating section name')
-                $section = getCurrentSectionName();
-                $linkClicked = false;
-                watching = false;
-                return;
             }
 
             window.requestAnimationFrame(step);
