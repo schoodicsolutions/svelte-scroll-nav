@@ -24,7 +24,7 @@
 
 <div style="margin-top: 50px;">
     <section>Top</section>
-    {#each [1,2,3,4,5] as index}
+    {#each [1,2,3,4,5,6,7,8,9,10,11,12] as index}
         <section style="height: 66vh;" use:scrollRef={`section${index}`}>
             <h1>Section {index}</h1>
         </section>

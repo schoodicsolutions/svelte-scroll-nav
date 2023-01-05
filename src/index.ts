@@ -22,6 +22,10 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
             options.onNavigate();
         }
 
+        if (options.section === get(section)) {
+            return;
+        }
+
         if (node.href) {
             await goto(node.href);
         } else {
@@ -31,8 +35,8 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
         if (options.section === reserved.top) {
             return;
         }
-
-        const wantedSection = get(sections).get(options.section);;
+        
+        const wantedSection = get(sections).get(options.section);
 
         if (wantedSection) {
             wantedSection.scrollIntoView(true);
