@@ -78,19 +78,25 @@
 
             if (prevPositions.filter(v => v === scrollY).length === bufferLimit) {
                 if ($linkClicked) {
-                    $linkClicked = false;
-                    watching = false;
+                    setTimeout(
+                        () => {
+                            $linkClicked = false;
+                            watching = false;
+                        },
+                        1000
+                    )
                     return;
                 }
                 $section = getCurrentSectionName();
                 $linkClicked = false;
                 watching = false;
+                return;
             }
 
             window.requestAnimationFrame(step);
         }
 
-        step();
+        window.requestAnimationFrame(step);
     }
 </script>
 
