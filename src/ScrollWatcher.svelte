@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { get } from 'svelte/store';
 	import { reserved } from './constants';
-	import { section, sections, linkClicked } from './stores';
+	import { section, sections, linkClicked, weights as weightsStore } from './stores';
 
     interface SectionWeight {
         name: string,
@@ -39,12 +39,12 @@
                 } else if (peekingFromTop) {
                     return {
                         name,
-                        weight: rect.bottom / window.innerHeight,
+                        weight: Math.max(0, rect.bottom / window.innerHeight),
                     };
                 } else if (peekingFromBottom) {
                     return {
                         name,
-                        weight: (window.innerHeight - rect.top) / window.innerHeight,
+                        weight: Math.max(0, (window.innerHeight - rect.top) / window.innerHeight),
                     };
                 } else {
                     return {
@@ -54,6 +54,8 @@
                 }
             }
         )
+
+        weightsStore.set(weights.slice());
 
         const winner = weights.sort(
             (weightA, weightB) => weightA.weight - weightB.weight

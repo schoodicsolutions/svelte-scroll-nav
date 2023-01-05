@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { linkClicked, section } from "../stores";
+	import { linkClicked, section, sections, weights } from "../stores";
 	import { scrollRef, scrollTo } from "../";
 	import ScrollWatcher from "../ScrollWatcher.svelte";
 
@@ -18,10 +18,12 @@
 <ScrollWatcher />
 
 <div style="position: fixed; height: 50px; top: 0; background: white; box-shadow: #000 0 0 2px 2px; width: 100%;">
-    {$section} 
-    <a href="/" use:scrollTo={{section: 'section4'}}>section4</a>
-    {scrollY}
-    {$linkClicked}
+    <div style="width: 100%; display: flex;">
+        {#each $weights as weight}
+            <div style={`background-color: rgba(${255 * (1 -weight.weight)},${255 * (1 -weight.weight)},${255 * (1 -weight.weight)}); height:24px; flex-grow: 1`}>
+            </div>
+        {/each}
+    </div>
 </div>
 
 <div style="margin-top: 50px;">
