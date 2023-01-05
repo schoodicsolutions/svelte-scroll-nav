@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 import { page } from '$app/stores';
 
 import { reserved } from './constants';
-import { section, sections } from './stores';
+import { section, sections, linkClicked } from './stores';
 import { goto } from '$app/navigation';
 
 import ScrollWatcher from './ScrollWatcher.svelte';
@@ -17,6 +17,8 @@ export interface LinkOptions {
 export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
     const listener = async (e: MouseEvent) => {
         e.preventDefault();
+        
+        linkClicked.set(true);
         
         if (options.onNavigate) {
             options.onNavigate();
@@ -35,7 +37,7 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
         if (options.section === reserved.top) {
             return;
         }
-        
+
         const wantedSection = get(sections).get(options.section);
 
         if (wantedSection) {

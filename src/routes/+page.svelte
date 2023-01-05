@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { section } from "../stores";
+	import { linkClicked, section } from "../stores";
 	import { scrollRef, scrollTo } from "../";
 	import ScrollWatcher from "../ScrollWatcher.svelte";
 
@@ -20,12 +20,13 @@
     {$section} 
     <a href="/" use:scrollTo={{section: 'section4'}}>section4</a>
     {scrollY}
+    {$linkClicked}
 </div>
 
 <div style="margin-top: 50px;">
     <section>Top</section>
-    {#each [1,2,3,4,5,6,7,8,9,10,11,12] as index}
-        <section style="height: 66vh;" use:scrollRef={`section${index}`}>
+    {#each Array(3).fill(null).map((_, i) => i + 1) as index}
+        <section style="height: 66vh; border-top: 2px black solid;" use:scrollRef={`section${index}`}>
             <h1>Section {index}</h1>
         </section>
     {/each}

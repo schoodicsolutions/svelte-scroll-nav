@@ -1,10 +1,19 @@
 <script lang="ts">
 	import { get } from 'svelte/store';
 	import { reserved } from './constants';
-	import { section, sections } from './stores';
+	import { section, sections, linkClicked } from './stores';
+
+    interface SectionWeight {
+        name: string,
+        weight: number,
+    }
 
     let watching = false;
     let prevPositions: number[] = [];
+
+    let scrollY: number;
+
+    const bufferLimit = 3;
 
     const getCurrentSectionName = () => {
         let currentSection: string = get(section);
@@ -12,47 +21,75 @@
         if (window.scrollY === 0) {
             return reserved.top;
         }
+        
+        const weights: SectionWeight[] = Array.from($sections).map(
+            ([name, el]) => {
+                const rect = el.getBoundingClientRect();
 
-        for (let [name, el] of $sections) {
-            const boundingRect = el.getBoundingClientRect();
-            
-            const withinTopHalf = boundingRect.top <= window.screen.height / 2;
-            const belowScreen = boundingRect.top >= 0;
-            const isLastSection = el === Array.from($sections.values()).at(-1);
+                const fullyInView = rect.top > 0 && rect.bottom < window.innerHeight;
+                const takesUpScreen = rect.top <= 0 && rect.bottom >= window.innerHeight;
+                const peekingFromTop = rect.bottom > 0 && rect.bottom < window.innerHeight;
+                const peekingFromBottom = rect.top > 0 && rect.bottom >= window.innerHeight;
 
-            if (withinTopHalf && (belowScreen || isLastSection)) {
-                currentSection = name;
-                break;
+                if (fullyInView || takesUpScreen) {
+                    return {
+                        name, 
+                        weight: 1
+                    };
+                } else if (peekingFromTop) {
+                    return {
+                        name,
+                        weight: rect.bottom / window.innerHeight,
+                    };
+                } else if (peekingFromBottom) {
+                    return {
+                        name,
+                        weight: (window.innerHeight - rect.top) / window.innerHeight,
+                    };
+                } else {
+                    return {
+                        name,
+                        weight: 0
+                    }
+                }
             }
-        }
+        )
 
-        return currentSection;
+        const winner = weights.sort(
+            (weightA, weightB) => weightA.weight - weightB.weight
+        ).pop();
+
+        return winner?.name || currentSection;
     }
 
 
     const watchScroll = () => {
-        if (watching) {
-            return;
-        }
+        if (watching) return;
 
         watching = true;
 
         const step = () => {
+            if (prevPositions.length === bufferLimit) { 
+                prevPositions.shift()
+            };
 
-            if (prevPositions.length === 10) { prevPositions.shift() };
-            prevPositions.push(window.scrollY);
+            prevPositions.push(scrollY);
 
-            if (prevPositions.filter(v => v === window.scrollY).length === 10) {
-                $section = getCurrentSectionName();
-                watching = false;
-                return;
+            if (prevPositions.filter(v => v === scrollY).length === bufferLimit) {
+                if ($linkClicked) {
+                    $linkClicked = false;
+                } else {
+                    $section = getCurrentSectionName();
+                    watching = false;
+                    return;
+                }
             }
 
             window.requestAnimationFrame(step);
         }
 
-        window.requestAnimationFrame(step);
+        step();
     }
 </script>
 
-<svelte:window on:scroll={watchScroll} />
+<svelte:window on:scroll={watchScroll} bind:scrollY />
