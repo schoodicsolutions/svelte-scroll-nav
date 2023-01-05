@@ -8,8 +8,6 @@
     const getCurrentSectionName = () => {
         let section: string = reserved.top;
 
-        console.log(window.scrollY);
-
         if (window.scrollY === 0) {
             return reserved.top;
         }

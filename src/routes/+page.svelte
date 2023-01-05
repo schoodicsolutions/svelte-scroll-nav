@@ -25,3 +25,5 @@
         </section>
     {/each}
 </div>
+
+<a href="/" use:scrollTo={{section: '+top'}}>top</a>
