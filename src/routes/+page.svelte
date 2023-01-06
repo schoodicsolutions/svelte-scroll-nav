@@ -11,6 +11,10 @@
 </script>
 
 <style>
+    * {
+        box-sizing: border-box;
+    }
+
     :global(html), :global(body) {
         scroll-behavior: smooth;
         margin: 0;
@@ -19,13 +23,14 @@
     }
 
     .sections {
-        padding-top: 64px;
+        padding-top: 69px;
     }
 
     section {
         border-top: #000 2px solid;
         height: 66vh;
         padding: 16px;
+        scroll-margin-top: 64px;
     }
 
     ul {
@@ -35,13 +40,17 @@
         gap: 1rem;
         list-style: none;
         align-items: middle;
+        padding: 24px;
+    }
+
+    li {
+        height:fit-content;
     }
 
     nav {
         width: 100%;
-        height: 64px;
         position: fixed;
-        padding: 16px;
+        background-color: lightgray;
     }
 
     a {
