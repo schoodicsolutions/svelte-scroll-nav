@@ -2,10 +2,13 @@
 	import { scrollTo, scrollRef, section } from '$lib';
 	import ScrollWatcher from '$lib/ScrollWatcher.svelte';
 
-    const skeletons = Array(10).fill('').map(
+    const rand255 = () => Math.floor(Math.random() * 255);
+
+    const skeletons = Array(50).fill('').map(
         (_, i) => {
             const num = i + 1;
-            return {heading: `Section ${num}`, section: `section${num}`};
+            const bgColor = `rgb(${rand255()},${rand255()},${rand255()})`
+            return {heading: `Section ${num}`, section: `section${num}`, bgColor};
         }
     );
 </script>
@@ -16,14 +19,15 @@
     }
 
     :global(html), :global(body) {
-        scroll-behavior: smooth;
         margin: 0;
         padding: 0;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
     .sections {
-        padding-top: 69px;
+        flex-grow: 1;
+        overflow: scroll;
+        scroll-behavior: smooth;
     }
 
     section {
@@ -37,6 +41,7 @@
         margin: 0;
         padding: 0;
         display: flex;
+        flex-wrap: wrap;
         gap: 1rem;
         list-style: none;
         align-items: middle;
@@ -49,7 +54,6 @@
 
     nav {
         width: 100%;
-        position: fixed;
         background-color: lightgray;
     }
 
@@ -62,23 +66,32 @@
     a.underlined {
         text-decoration: underline;
     }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
 </style>
 
 <ScrollWatcher />
 
-<nav>
-    <ul>
-        <li><a href="/" class:underlined={'+top' === $section} use:scrollTo={{section: '+top'}}>Top</a></li>
+<div class="container">
+    <nav>
+        <ul>
+            <li><a href="/" class:underlined={'+top' === $section} use:scrollTo={{section: '+top'}}>Top</a></li>
+            {#each skeletons as skeleton}
+                <li><a href="/" use:scrollTo={{section: skeleton.section}} class:underlined={skeleton.section === $section}>{skeleton.heading}</a></li>
+            {/each}
+        </ul>
+    </nav>
+    
+    <div class="sections">
         {#each skeletons as skeleton}
-            <li><a href="/" use:scrollTo={{section: skeleton.section}} class:underlined={skeleton.section === $section}>{skeleton.heading}</a></li>
+            <section use:scrollRef={skeleton.section} style:background-color={skeleton.bgColor}>
+                <h1>{skeleton.heading}</h1>
+            </section>
         {/each}
-    </ul>
-</nav>
-
-<div class="sections">
-    {#each skeletons as skeleton}
-        <section use:scrollRef={skeleton.section}>
-            <h1>{skeleton.heading}</h1>
-        </section>
-    {/each}
+    </div>
 </div>
