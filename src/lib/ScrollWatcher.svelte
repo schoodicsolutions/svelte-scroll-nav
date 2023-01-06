@@ -1,19 +1,13 @@
 <script lang="ts">
 	import { get } from 'svelte/store';
-	import { reserved } from './constants';
+	import { getWeight } from './getWeight';
+	import { reserved, SCROLL_BUFFER } from './constants';
 	import { section, sections, linkClicked } from './stores';
-
-    interface SectionWeight {
-        name: string,
-        weight: number,
-    }
 
     let watching = false;
     let prevPositions: number[] = [];
 
     let scrollY: number;
-
-    const bufferLimit = 8;
 
     const getCurrentSectionName = () => {
         let currentSection: string = get(section);
@@ -22,46 +16,21 @@
             return reserved.top;
         }
         
-        const weights: SectionWeight[] = Array.from($sections).map(
-            ([name, el]) => {
-                const rect = el.getBoundingClientRect();
-
-                const fullyInView = rect.top > 0 && rect.bottom < window.innerHeight;
-                const takesUpScreen = rect.top <= 0 && rect.bottom >= window.innerHeight;
-                const peekingFromTop = rect.bottom > 0 && rect.bottom < window.innerHeight;
-                const peekingFromBottom = rect.top > 0 && rect.bottom >= window.innerHeight;
-
-                if (takesUpScreen || fullyInView) {
-                    return {
-                        name,
-                        weight: 1,
-                    }
-                } else if (peekingFromTop) {
-                    return {
-                        name,
-                        weight: Math.max(0, rect.bottom / window.innerHeight),
-                    };
-                } else if (peekingFromBottom) {
-                    return {
-                        name,
-                        weight: Math.max(0, (window.innerHeight - rect.top) / window.innerHeight),
-                    };
-                } else {
-                    return {
-                        name,
-                        weight: 0
-                    }
-                }
+        const weights: Array<{name: string, weight: number}> = [];
+        
+        for (const [name, el] of $sections) {
+            const weight = getWeight(el.getBoundingClientRect(), window);
+            if (weight) {
+                weights.push({name, weight});
             }
-        )
+        }
 
         const heaviestSection = weights.sort(
-            (weightA, weightB) => weightA.weight - weightB.weight
+            ({weight: weightA}, {weight: weightB}) => weightB - weightA
         ).pop();
 
         return heaviestSection?.name || currentSection;
     }
-
 
     const watchScroll = () => {
         if (watching) return;
@@ -69,13 +38,14 @@
         watching = true;
 
         const step = () => {
-            if (prevPositions.length === bufferLimit) { 
+            if (prevPositions.length === SCROLL_BUFFER) { 
                 prevPositions.shift();
             };
 
             prevPositions.push(scrollY);
 
-            if (prevPositions.filter(v => v === scrollY).length === bufferLimit) {
+            if (prevPositions.filter(v => v === scrollY).length === SCROLL_BUFFER) {
+                prevPositions = [];
                 if ($linkClicked) {
                     setTimeout(
                         () => {
