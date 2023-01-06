@@ -10,6 +10,7 @@ export function getWeight(rect: DOMRect, window: Window) {
         return Math.max(0, rect.bottom / window.innerHeight);
     } else if (isPeekingFromBottom) {
         return Math.max(0, (window.innerHeight - rect.top) / window.innerHeight);
+    } else {
+        return 0;
     }
-    return 0;
 }

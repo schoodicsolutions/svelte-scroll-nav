@@ -27,7 +27,7 @@
         }
 
         const heaviestSection = weights.sort(
-            ({weight: weightA}, {weight: weightB}) => weightB - weightA
+            ({weight: weightA}, {weight: weightB}) => weightA - weightB
         ).pop();
 
         return heaviestSection?.name || currentSection;
@@ -37,7 +37,7 @@
         if (watching) {
             return;
         }
-        
+
         watching = true;
 
         const step = () => {
