@@ -29,6 +29,7 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
         }
 
         if (options.section === reserved.top) {
+            section.set(reserved.top);
             return;
         }
 
