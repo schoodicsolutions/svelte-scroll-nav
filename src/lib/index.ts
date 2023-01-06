@@ -22,10 +22,6 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
             options.onNavigate();
         }
 
-        if (options.section === get(section)) {
-            return;
-        }
-
         if (node.href) {
             await goto(node.href);
         } else {
