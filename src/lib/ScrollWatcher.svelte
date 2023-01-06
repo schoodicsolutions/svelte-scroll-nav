@@ -20,9 +20,10 @@
         
         for (const [name, el] of $sections) {
             const weight = getWeight(el.getBoundingClientRect(), window);
-            if (weight) {
-                weights.push({name, weight});
+            if (!weight) {
+                continue;
             }
+            weights.push({name, weight});
         }
 
         const heaviestSection = weights.sort(
@@ -33,8 +34,10 @@
     }
 
     const watchScroll = () => {
-        if (watching) return;
-
+        if (watching) {
+            return;
+        }
+        
         watching = true;
 
         const step = () => {
