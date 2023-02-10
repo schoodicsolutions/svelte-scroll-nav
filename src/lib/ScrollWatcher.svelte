@@ -7,8 +7,6 @@
     let watching = false;
     let prevPositions: number[] = [];
 
-    let scrollY: number;
-
     const getCurrentSectionName = () => {
         let currentSection: string = get(section);
 
@@ -45,9 +43,9 @@
                 prevPositions.shift();
             };
 
-            prevPositions.push(scrollY);
+            prevPositions.push(window.scrollY);
 
-            if (prevPositions.filter(v => v === scrollY).length === SCROLL_BUFFER) {
+            if (prevPositions.filter(v => v === window.scrollY).length === SCROLL_BUFFER) {
                 prevPositions = [];
                 if ($linkClicked) {
                     setTimeout(
@@ -72,4 +70,4 @@
     }
 </script>
 
-<svelte:window on:scroll={watchScroll} bind:scrollY />
+<svelte:window on:scroll|passive={watchScroll} />
