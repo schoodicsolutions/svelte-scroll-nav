@@ -14,7 +14,11 @@ export interface LinkOptions {
     section: string;
 }
 
-export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
+export function scrollTo(node: HTMLAnchorElement, options?: LinkOptions) {
+    if (!options) {
+        return;
+    }
+
     const listener = async (e: MouseEvent) => {
         e.preventDefault();
 
@@ -56,7 +60,11 @@ export function scrollTo(node: HTMLAnchorElement, options: LinkOptions) {
     }
 }
 
-export function scrollRef(node: HTMLElement, name: string) {
+export function scrollRef(node: HTMLElement, name?: string) {
+    if (!name) {
+        return;
+    }
+
     if (name[0] === '+') {
         throw new Error(`${name} is a reserved name`);
     }

@@ -55,6 +55,7 @@
     nav {
         width: 100%;
         background-color: lightgray;
+        position: fixed;
     }
 
     a {
@@ -66,32 +67,23 @@
     a.underlined {
         text-decoration: underline;
     }
-
-    .container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        overflow: hidden;
-    }
 </style>
 
 <ScrollWatcher />
 
-<div class="container">
-    <nav>
-        <ul>
-            <li><a href="/" class:underlined={'+top' === $section} use:scrollTo={{section: '+top'}}>Top</a></li>
-            {#each skeletons as skeleton}
-                <li><a href="/" use:scrollTo={{section: skeleton.section}} class:underlined={skeleton.section === $section}>{skeleton.heading}</a></li>
-            {/each}
-        </ul>
-    </nav>
-    
-    <div class="sections">
+<nav>
+    <ul>
+        <li><a href="/" class:underlined={'+top' === $section} use:scrollTo={{section: '+top'}}>Top</a></li>
         {#each skeletons as skeleton}
-            <section use:scrollRef={skeleton.section} style:background-color={skeleton.bgColor}>
-                <h1>{skeleton.heading}</h1>
-            </section>
+            <li><a href="/" use:scrollTo={{section: skeleton.section}} class:underlined={skeleton.section === $section}>{skeleton.heading}</a></li>
         {/each}
-    </div>
+    </ul>
+</nav>
+
+<div class="sections">
+    {#each skeletons as skeleton}
+        <section use:scrollRef={skeleton.section} style:background-color={skeleton.bgColor}>
+            <h1>{skeleton.heading}</h1>
+        </section>
+    {/each}
 </div>
